@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
 
 const testimonialsData = [
   {
@@ -35,8 +36,8 @@ const testimonialsData = [
 
 const Testimonials = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // Determine items per slide based on screen width
+  
+  // Adjust testimonials per slide based on screen width
   const itemsPerSlide = window.innerWidth < 768 ? 1 : 2; // 1 item on mobile, 2 on tablet and above
   const totalSlides = Math.ceil(testimonialsData.length / itemsPerSlide);
 
@@ -59,25 +60,27 @@ const Testimonials = () => {
         <h2 className="text-4xl font-extrabold text-red-800 text-center mb-8">What Our Clients Say</h2>
 
         <div className="flex justify-center overflow-hidden">
-          <div
-            className="flex transition-transform duration-500"
-            style={{
-              transform: `translateX(-${currentIndex * (100 / itemsPerSlide)}%)`,
-              width: `${totalSlides * 100}%`,
-            }}
+          <motion.div 
+            className="flex"
+            initial={{ opacity: 0, x: 100 }} // Start off-screen to the right
+            animate={{ opacity: 1, x: 0 }} // Animate into view
+            exit={{ opacity: 0, x: -100 }} // Animate out to the left
+            transition={{ duration: 0.5 }} // Animation duration
+            key={currentIndex} // Key prop to trigger re-render
+            style={{ paddingBottom: '20px' }} // Add bottom padding here
           >
-            {testimonialsData.map((testimonial, index) => (
-              <div key={index} className="flex-shrink-0 w-full sm:w-1/2 p-2"> {/* Adjusted width for responsive layout */}
-                <div className="bg-white p-4 rounded-lg shadow-lg transition-transform duration-300 hover:shadow-2xl hover:scale-105 text-center flex flex-col h-full">
-                  <p className="text-gray-600 mb-4 italic text-lg flex-1">{testimonial.testimonial}</p> {/* Flex-1 for flexibility */}
-                  <div className="flex flex-col mt-4"> {/* Flex container for alignment */}
+            {getVisibleTestimonials().map((testimonial, index) => (
+              <div key={index} className="w-full md:w-1/2 px-4">
+                <div className="bg-white p-6 md:p-10 rounded-lg shadow-lg transition-transform duration-300 hover:shadow-2xl hover:scale-105 text-center flex flex-col justify-between h-full">
+                  <p className="text-gray-600 mb-4 italic text-lg">"{testimonial.testimonial}"</p>
+                  <div>
                     <h3 className="text-lg font-semibold text-gray-800">{testimonial.name}</h3>
                     <p className="text-gray-500">{testimonial.position}</p>
                   </div>
                 </div>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Dots indicator */}
