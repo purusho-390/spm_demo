@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 // Import images from the assets folder
 import ConstructionSite from '../assets/bgp (1).webp';
@@ -21,6 +21,7 @@ const images = [
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  // Function to handle slide change with interval
   useEffect(() => {
     const slideInterval = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length);
@@ -29,19 +30,21 @@ const Hero = () => {
     return () => clearInterval(slideInterval);
   }, []);
 
-  // Function to split text, format, and make uppercase
-  const formatText = (altText) => {
-    const upperCaseText = altText.toUpperCase();
-    const words = upperCaseText.split(' ');
-    const firstWord = words[0]; // Bold first word
-    const secondWord = words.slice(1).join(' ');
-    return (
-      <span className="text-4xl md:text-5xl font-semibold text-red-800">
-        {firstWord}{' '}
-        <span className="font-thin text-red-800">{secondWord}</span>
-      </span>
-    );
-  };
+  // Memoize the formatted text to avoid unnecessary recalculations
+  const formatText = useMemo(() => {
+    return images.map((image) => {
+      const upperCaseText = image.alt.toUpperCase();
+      const words = upperCaseText.split(' ');
+      const firstWord = words[0]; // Bold first word
+      const secondWord = words.slice(1).join(' ');
+      return (
+        <span key={image.alt} className="text-4xl md:text-5xl font-semibold text-red-800">
+          {firstWord}{' '}
+          <span className="font-thin text-red-800">{secondWord}</span>
+        </span>
+      );
+    });
+  }, [images]);
 
   return (
     <section
@@ -54,17 +57,17 @@ const Hero = () => {
           {images.map((image) => (
             <link rel="preload" href={image.src} as="image" key={image.alt} />
           ))}
-          
+
           {images.map((image, index) => (
             <img
               key={index}
               src={image.src}
               alt={image.alt}
-              loading={index === 0 ? "eager" : "lazy"} // Lazy load images except the first one
+              loading={index === 0 ? 'eager' : 'lazy'} // Lazy load images except the first one
               className={`w-full h-full object-cover absolute transition-opacity duration-1000 ${
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
-              style={{ minHeight: '90vh' }} // Ensure the image takes comfortable height
+              style={{ minHeight: '90vh' }} // Ensure the image takes a comfortable height
             />
           ))}
         </div>
@@ -77,7 +80,7 @@ const Hero = () => {
               index === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            {formatText(image.alt)}
+            {formatText[index]}
           </div>
         ))}
       </div>
