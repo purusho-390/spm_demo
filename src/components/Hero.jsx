@@ -53,18 +53,16 @@ const Hero = () => {
     >
       <div className="w-full h-full overflow-hidden relative">
         <div className="slider relative w-full h-full">
-          {/* Preloading images */}
-          {images.map((image) => (
-            <link rel="preload" href={image.src} as="image" key={image.alt} />
-          ))}
+          {/* Preload the first image */}
+          <link rel="preload" href={images[0].src} as="image" />
 
           {images.map((image, index) => (
             <img
               key={index}
               src={image.src}
               alt={image.alt}
-              loading={index === 0 ? 'eager' : 'lazy'} // Lazy load images except the first one
-              className={`w-full h-full object-cover absolute transition-opacity duration-1000 ${
+              loading={index === 0 ? 'eager' : 'lazy'} // Eager load the first image
+              className={`w-full h-full object-cover absolute transition-opacity duration-1000 ease-in-out ${
                 index === currentSlide ? 'opacity-100' : 'opacity-0'
               }`}
               style={{ minHeight: '90vh' }} // Ensure the image takes a comfortable height
@@ -76,7 +74,7 @@ const Hero = () => {
         {images.map((image, index) => (
           <div
             key={index}
-            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-center py-8 px-8 shadow-md transition-opacity duration-1000 ${
+            className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white text-center py-8 px-8 shadow-md transition-opacity duration-1000 ease-in-out ${
               index === currentSlide ? 'opacity-100' : 'opacity-0'
             }`}
           >
@@ -89,7 +87,7 @@ const Hero = () => {
         {images.map((_, index) => (
           <div
             key={index}
-            className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ${
+            className={`w-3 h-3 rounded-full cursor-pointer transition-all duration-300 ease-in-out ${
               index === currentSlide ? 'bg-red-800' : 'bg-gray-300'
             }`}
             onClick={() => setCurrentSlide(index)} // Allow clicking dots to change slides

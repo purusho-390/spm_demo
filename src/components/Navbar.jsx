@@ -27,7 +27,7 @@ const Navbar = () => {
       <div className="container mx-auto p-2 md:px-8 md:py-1 flex justify-between items-center">
         {/* Logo */}
         <div className="flex items-center">
-          <img src={Logo} alt="SPM Enterprises Logo - Building construction company" className="h-12 md:h-14 lg:h-20" /> {/* Adjust height as needed */}
+          <img src={Logo} alt="SPM Enterprises Logo - Building construction company" className="h-12 md:h-14 lg:h-20" />
         </div>
 
         {/* Navigation Items (Desktop) */}
@@ -38,7 +38,8 @@ const Navbar = () => {
                 to={item}
                 key={item}
                 smooth={true}
-                duration={500}
+                duration={1000} // Increase duration for smoother scrolling
+                offset={-70} // Adjust offset for fixed navbar height
                 className="text-gray-700 hover:text-red-900 transition-colors duration-300 cursor-pointer text-base lg:text-lg font-medium"
               >
                 {item.charAt(0).toUpperCase() + item.slice(1)}
@@ -70,7 +71,8 @@ const Navbar = () => {
                 to={item}
                 key={item}
                 smooth={true}
-                duration={500}
+                duration={1000} // Increase duration for smoother scrolling
+                offset={-70} // Adjust offset for fixed navbar height
                 onClick={toggleMenu}
                 className="text-gray-700 hover:text-red-600 transition-colors duration-300 cursor-pointer text-lg font-medium"
               >
